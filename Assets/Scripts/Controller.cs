@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,8 @@ public class Controller : MonoBehaviour
     public LayerMask weaponLayer; // Слой, на котором находится оружие
     public GameObject pickupButton;
     [SerializeField] private Gun _gunHolder;
+    [SerializeField] private Image weaponImage;
+    public TextMeshProUGUI _textMeshPro;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -165,6 +168,8 @@ public class Controller : MonoBehaviour
             // Выбираем следующее оружие
             currentGun = guns[currentGunIndex];
             currentGun.gameObject.SetActive(true);
+            weaponImage.sprite = currentGun.GetComponent<SpriteRenderer>().sprite;
+            UpdateEnergyConsumptionText();
         }
     }
     public void AddWeapon(Gun weapon)
@@ -185,6 +190,7 @@ public class Controller : MonoBehaviour
         currentGun?.gameObject.SetActive(false);
         currentGun= newGun;
         currentGunIndex = (Array.IndexOf(guns.ToArray(), currentGun) + 1)%guns.Count;
+        SwitchWeapon();
         Destroy(weapon.gameObject);
     }
 
@@ -242,6 +248,11 @@ public class Controller : MonoBehaviour
         {
             pickupButton?.SetActive(false);
         } 
+    }
+    
+    public void UpdateEnergyConsumptionText()
+    {
+        _textMeshPro.text = currentGun.energyConsumptionPerShot.ToString();
     }
 }
 

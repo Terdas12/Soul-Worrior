@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     private Controller _playerHealth;
     public TypeEnemy typeEnemy;
     [SerializeField] Gun gun;
+    public GameObject floatingDamage;
 
     public enum TypeEnemy
     {
@@ -112,6 +113,9 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        Vector2 damagePos= new Vector2(transform.position.x, transform.position.y+2.75f);
+        floatingDamage.GetComponentInChildren<FloatingDamage>().damage=damage;
+        Instantiate(floatingDamage, damagePos, Quaternion.identity);
     }
 
     private void OnDrawGizmosSelected()
